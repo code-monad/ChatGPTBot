@@ -11,7 +11,7 @@ First, you should install `python-telegram-bot` and `ChatGPT` library from sourc
 git clone https://github.com/python-telegram-bot/python-telegram-bot
 cd python-telegram-bot && python setup.py install --user
 # For proxy support
-pip install python-telegram-bot[socks] 
+pip install httpx[socks]
 
 # Install ChatGPT API
 git clone https://github.com/acheong08/ChatGPT
