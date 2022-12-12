@@ -12,7 +12,7 @@ def LoadMemoryFromRow(csv_row) -> GPTMemory:
 
 def LoadMemories(filename):
     memories = {}
-    with open(filename, mode='r+') as f:
+    with open(filename, mode='a+') as f:
         reader = csv.reader(f, delimiter=',')
         for row in reader:
             memories[row[0]] = LoadMemoryFromRow(row)
