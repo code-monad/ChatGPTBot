@@ -254,7 +254,9 @@ if __name__ == '__main__':
     atexit.register(save_datas)
     config_map = toml.load(config_file)
     logger.debug("Load from {}...".format(config_file))
-    proxy_url = config_map["proxy"]["server"]
+    proxy_url = ""
+    if "proxy" in config_map and "server" in config_map["proxy"]:
+        proxy_url = config_map["proxy"]["server"]
     if config_map is None:
         logger.warning("")
     elif in_Debug:
