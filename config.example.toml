@@ -1,0 +1,11 @@
+[bot]
+token = "TELEGRAM_BOT_TOKEN"
+allow = [ <TELEGRAM_USER_ID> ]
+
+[chatgpt]
+session_token = "<OPENAI_SESSION_TOKEN>"
+cf_clearance = "<OPENAI_SESSION_CF_CLEARANCE>"
+user_agent = "<YOUR_BROWSER'S_UA>"
+
+[proxy]
+server = "socks5://127.0.0.1:1080"
