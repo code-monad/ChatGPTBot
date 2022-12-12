@@ -20,7 +20,7 @@ cd ChatGPT && python setup.py install --user
 
 First, create a `config.toml` from the [template file](./config.example.toml)
 
-Modify the content, replace with the correct keys/session-IDs(Check Wiki)[https://github.com/acheong08/ChatGPT/wiki/Setup]
+Modify the content, replace with the correct keys/session-IDs (Check [Wiki](https://github.com/acheong08/ChatGPT/wiki/Setup0))
 
 ```bash
 python main.py
