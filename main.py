@@ -118,7 +118,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await update.message.reply_text(emojize(":sparkles:已初始化"), reply_markup=reply_markup)
-    start_msg.delete()
+    await start_msg.delete()
 
 
 async def reborn(update: Update, context: ContextTypes.DEFAULT_TYPE):
