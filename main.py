@@ -14,6 +14,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Keyboar
 from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, \
     CallbackQueryHandler
 
+
 import memories
 
 config_file = "config.toml"
@@ -23,6 +24,8 @@ inited = False
 in_naming = False
 memory_map = {}
 unnamed_memory = None
+last_reply = None
+last_chat = ""
 
 chatbot = None
 config = {}
@@ -81,6 +84,19 @@ async def list_memories(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=update.effective_chat.id, text="回忆列表如下", reply_markup=reply_markup)
     else:
         await context.bot.send_message(chat_id=update.effective_chat.id, text="没有保存过的记忆")
+
+async def reroll(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if await check_id(update.effective_chat.id, context):
+        return
+    if last_reply is not None and last_chat != "":
+        await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=telegram.constants.ChatAction.TYPING)
+        await last_reply.edit_text("正在重新生成...")
+        reply = await chatbot.get_chat_response(last_chat)
+        reply_msg = reply["message"].encode().decode('utf-8')
+        logger.info("Got reply: {}", reply_msg)
+        await last_reply.edit_text(reply_msg)
+    else:
+        return
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -182,7 +198,10 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply = await chatbot.get_chat_response(update.message.text)
         reply_msg = reply["message"].encode().decode('utf-8')
         logger.info("Got reply: {}", reply_msg)
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=reply_msg)
+        global last_reply
+        global last_chat
+        last_chat = update.message.text
+        last_reply = await context.bot.send_message(chat_id=update.effective_chat.id, text=reply_msg)
 
 
 async def rollback(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -267,7 +286,9 @@ if __name__ == '__main__':
         "cf_clearance": config_map["chatgpt"]["cf_clearance"],
         "user_agent": config_map["chatgpt"]["user_agent"]
     }
+    logger.info(f"Loading memories from {memory_file}")
     memory_map = memories.LoadMemories(memory_file)
+    logger.info(f"Memories:{memory_map}")
     builder = ApplicationBuilder().token(config_map["bot"]["token"])
     if proxy_url is not None and proxy_url != "":
         builder = builder.proxy_url(proxy_url).get_updates_proxy_url(proxy_url)
