@@ -31,5 +31,6 @@ python main.py
 - `/start` -- Initialize
 - `/list` -- List all memories
 - `/check` -- Check current session detail
+- `/reroll` -- Refresh latest reply with latest prompt
 - `/reborn` -- Start a new session
 - `/rollback` -- Forgot last prompt 
