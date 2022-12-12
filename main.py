@@ -95,6 +95,7 @@ async def reroll(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_msg = reply["message"].encode().decode('utf-8')
         logger.info("Got reply: {}", reply_msg)
         await last_reply.edit_text(reply_msg)
+        await update.message.delete() # Delete command log for better experience
     else:
         return
 
@@ -300,6 +301,7 @@ if __name__ == '__main__':
     list_handler = CommandHandler('list', list_memories)
 
     rollback_handler = CommandHandler('rollback', rollback)
+    reroll_handler = CommandHandler('reroll', reroll)
     chat_handler = telegram.ext.MessageHandler(filters.TEXT & (~filters.COMMAND), chat)
     detail_handler = CommandHandler('check', chat_detail)
 
@@ -307,6 +309,7 @@ if __name__ == '__main__':
     application.add_handler(reborn_handler)
     application.add_handler(list_handler)
     application.add_handler(rollback_handler)
+    application.add_handler(reroll_handler)
     application.add_handler(chat_handler)
     application.add_handler(CallbackQueryHandler(button))
     application.add_handler(detail_handler)
