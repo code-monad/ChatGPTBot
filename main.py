@@ -14,7 +14,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Keyboar
 from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, \
     CallbackQueryHandler
 
-
+import nest_asyncio
 import memories
 
 config_file = "config.toml"
@@ -117,15 +117,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     markup = ReplyKeyboardMarkup(keyboard)
     start_msg = await context.bot.send_message(chat_id=update.effective_chat.id, text="正在初始化……", reply_markup=markup)
-    global chatbot
+    global chatbot, inited
     logger.debug(config)
-    try:
-        chatbot = Chatbot(config, conversation_id=None)
+    if chatbot is None:
+        try:
+            chatbot = Chatbot(config, conversation_id=None)
+        except Exception as e:
+            inited = False
+            await update.message.reply_text(emojize(":sweat_drops:初始化失败！ 原因： `{}` ".format(e)),
+                                            parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
+    else:
         inited = True
-    except Exception as e:
-        inited = False
-        await update.message.reply_text(emojize(":sweat_drops:初始化失败！ 原因： `{}` ".format(e)),
-                                        parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
+
     if inited:
         keyboard = [
             [
@@ -220,7 +223,9 @@ async def rollback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def refresh_session(context: ContextTypes.DEFAULT_TYPE):
     try:
         if chatbot is not None:
-            chatbot.refresh_session()
+            await chatbot.refresh_session()
+            config_map["chatgpt"]["session_token"] = chatbot.config["session_token"]
+            config_map["chatgpt"]["cf_clearance"] = chatbot.config["cf_clearance"]
     except Exception as e:
         logger.error(e)
 
@@ -272,6 +277,7 @@ def save_datas():
 
 if __name__ == '__main__':
     atexit.register(save_datas)
+    nest_asyncio.apply()
     config_map = toml.load(config_file)
     logger.debug("Load from {}...".format(config_file))
     proxy_url = ""
