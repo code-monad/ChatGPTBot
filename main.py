@@ -122,6 +122,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if chatbot is None:
         try:
             chatbot = Chatbot(config, conversation_id=None)
+            inited = True
         except Exception as e:
             inited = False
             await update.message.reply_text(emojize(":sweat_drops:初始化失败！ 原因： `{}` ".format(e)),
