@@ -224,7 +224,7 @@ async def rollback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def refresh_session(context: ContextTypes.DEFAULT_TYPE):
     try:
         if chatbot is not None:
-            await chatbot.refresh_session()
+            chatbot.refresh_session()
             config_map["chatgpt"]["session_token"] = chatbot.config["session_token"]
             config_map["chatgpt"]["cf_clearance"] = chatbot.config["cf_clearance"]
     except Exception as e:
