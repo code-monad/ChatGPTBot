@@ -1,0 +1,8 @@
+[bot]
+token = "$$TELEGRAM_BOT_TOKEN$$"
+allow = [ $$TELEGRAM_USER_ID$$ ]
+
+[chatgpt]
+session_token = "$$OPENAI_SESSION_TOKEN$$"
+cf_clearance = "$$OPENAI_SESSION_CF_CLEARANCE$$"
+user_agent = "$$BROWSER_UA$$"

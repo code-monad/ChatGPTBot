@@ -1,6 +1,7 @@
-FROM bengreenier/docker-xvfb:stable
+FROM bengreenier/docker-xvfb:buster
 WORKDIR /app/ChatGPTBot
-COPY ./../*.py .
+COPY *.py ./
+COPY docker/* ./
 RUN apt-get update -y \
   && apt-get install --no-install-recommends -y mesa-utils python3-pip git build-essential \
   && rm -rf /var/lib/apt/lists/* \
