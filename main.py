@@ -226,7 +226,6 @@ async def refresh_session(context: ContextTypes.DEFAULT_TYPE):
         if chatbot is not None:
             chatbot.refresh_session()
             config_map["chatgpt"]["session_token"] = chatbot.config["session_token"]
-            config_map["chatgpt"]["cf_clearance"] = chatbot.config["cf_clearance"]
     except Exception as e:
         logger.error(e)
 
@@ -270,7 +269,6 @@ def save_datas():
     logger.info("Updating Session keys...")
     if chatbot is not None:
         config_map["chatgpt"]["session_token"] = chatbot.config["session_token"]
-        config_map["chatgpt"]["cf_clearance"] = chatbot.config["cf_clearance"]
         logger.info(config_map)
         with open(config_file, "w") as f:
             toml.dump(config_map, f)
@@ -290,9 +288,7 @@ if __name__ == '__main__':
         logger.debug("Telegram Bot token: {}", config_map["bot"]["token"])
         logger.debug("Allowed users' ID: {}", config_map["bot"]["allow"])
     config = {
-        "session_token": config_map["chatgpt"]["session_token"],
-        "cf_clearance": config_map["chatgpt"]["cf_clearance"],
-        "user_agent": config_map["chatgpt"]["user_agent"]
+        "session_token": config_map["chatgpt"]["session_token"]
     }
     logger.info(f"Loading memories from {memory_file}")
     memory_map = memories.LoadMemories(memory_file)
