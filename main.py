@@ -121,7 +121,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.debug(config)
     if chatbot is None:
         try:
-            chatbot = Chatbot(config, conversation_id=None)
+            chatbot = Chatbot(config, conversation_id=None, request_timeout=300)
             inited = True
         except Exception as e:
             inited = False
@@ -173,7 +173,7 @@ async def load(update: Update, context: ContextTypes.DEFAULT_TYPE, name):
             chatbot.parent_id = memory_map[name].parent_id
             await msg.edit_text("加载成功！")
             await asyncio.sleep(1)
-            msg.delete()
+            await msg.delete()
     else:
         await context.bot.send_message(chat_id=update.effective_chat.id, text=f"没有名为{name}的记忆！")
 
