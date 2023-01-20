@@ -1,9 +1,9 @@
 [bot]
-token = "TELEGRAM_BOT_TOKEN"
-allow = [ <TELEGRAM_USER_ID> ]
+token = "5826442111:AAGU_Vrj1x7fbLt514SMzHvR3zSByPdEfxQ"
+allow = [ <129548370> ]
 
 [chatgpt]
-session_token = "<OPENAI_SESSION_TOKEN>"
+session_token = "<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>"
 cf_clearance = "<OPENAI_SESSION_CF_CLEARANCE>"
 user_agent = "<YOUR_BROWSER'S_UA>"
 
